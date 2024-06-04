@@ -1,0 +1,181 @@
+{
+    "definition": {
+        "openapi": "3.1.0",
+        "info": {
+            "title": "LogRocket Express API with Swagger",
+            "version": "0.1.0",
+            "description": "This is a simple CRUD API application made with Express and documented with Swagger",
+            "license": {
+                "name": "MIT",
+                "url": "https://spdx.org/licenses/MIT.html"
+            },
+            "contact": {
+                "name": "LogRocket",
+                "url": "https://logrocket.com",
+                "email": "info@email.com"
+            }
+        },
+        "servers": [
+            {
+                "url": "http://localhost:3000/api/v1"
+            }
+        ],
+        "components": {
+            "schemas": {
+                "blague": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": "Id de la blague",
+                            "readOnly": true
+                        },
+                        "question": {
+                            "type": "string",
+                            "description": "Question de la blague"
+                        },
+                        "answer":{
+                            "type": "string",
+                            "description": "Réponse de la blague"
+                        }
+                    },
+                    "example": {
+                        "id": 1,
+                        "question": "Quelle est la femelle du hamster ?",
+                        "answer": "L'Amsertdam"
+                    }
+                },
+                "addBlague": {
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "description": "Message of the recipe"
+                        },
+                        "result": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/blague"
+                        }
+                    }
+                },
+                "responseBlague": {
+                    "type": "object",
+                    "properties": {
+                        "result": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/blague"
+                        }
+                    }
+                },
+                "error": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "description": "Message of the error"
+                        }
+                    }
+                }
+            }
+        },
+        "paths": {
+            "/blague": {
+                "get": {
+                    "summary": "Retourne tout les blagues de la bdd",
+                    "tags": [
+                        "blague"
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Toutes les blagues de la bdd.",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/blague"
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Some server error"
+                        }
+                    }
+                }
+            },
+            "/blague/{id}": {
+                "get": {
+                    "summary": "Get information about joke by id",
+                    "tags": [
+                        "blague"
+                    ],
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "id",
+                            "schema": {
+                                "type": "integer"
+                            },
+                            "required": true,
+                            "description": "Id of the joke"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "joke with this id",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/responseBlague"
+                                    }
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "Error joke not found",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/error"
+                                    }
+                                }
+                            }
+                        },
+                        "405": {
+                            "description": "Error param is not a number",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/error"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/blague/random": {
+                "get": {
+                    "summary": "Permet de récuperer une blague aléatoire",
+                    "tags": [
+                        "blague"
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "La blague selectionnée aléatoirement.",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/responseBlague"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "apis": [
+        "./routes/*.js"
+    ]
+}
